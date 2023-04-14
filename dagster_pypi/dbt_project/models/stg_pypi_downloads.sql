@@ -1,5 +1,5 @@
 with base as (
-select * from {{source('duckdb', 'pypi_downloads')}}
+select * from {{source('dagster_pypi', 'pypi_downloads')}}
 )
 
 
