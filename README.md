@@ -1,51 +1,57 @@
-# dagster_pypi
+# Dagster Pypi / Github
 
-This is a [Dagster](https://dagster.io/) project scaffolded with [`dagster project scaffold`](https://docs.dagster.io/getting-started/create-new-project).
+This starter kit shows how to build the Dagster's
+Software-Defined Assets for an Analytics ETL Workflow with
+different deployments for a local and prod environment.
 
-## Getting started
+Locally, this project uses DuckDB, dbt, and CSV files to load sample
+data and generate example models.
 
-First, install your Dagster code location as a Python package. By using the --editable flag, pip will install your
-Python package in ["editable mode"](https://pip.pypa.io/en/latest/topics/local-project-installs/#editable-installs) so
-that as you develop, local code changes will automatically apply.
+In production, this project uses BigQuery along with the pandas
+io manager to fetch data on Pypi downloads from the Bigquery public
+dataset, as well as Steampipe to fetch the latest Github data
+for stars, forks, and other metrics.
 
-```bash
-pip install -e ".[dev]"
-```
+## Prequisites
 
-Then, start the Dagster UI web server:
+### Local Development
 
-```bash
-dagster dev
-```
-
-Open http://localhost:3000 with your browser to see the project.
-
-You can start writing assets in `dagster_pypi/assets.py`. The assets are automatically loaded into the Dagster code
-location as you define them.
-
-## Development
-
-
-### Adding new Python dependencies
-
-You can specify new Python dependencies in `setup.py`.
-
-### Unit testing
-
-Tests are in the `dagster_pypi_tests` directory and you can run tests using `pytest`:
+To run locally, all you need is to install this package locally:
 
 ```bash
-pytest dagster_pypi_tests
+pip install -e .
 ```
 
-### Schedules and sensors
+Then start dagit
 
-If you want to enable Dagster [Schedules](https://docs.dagster.io/concepts/partitions-schedules-sensors/schedules) or [Sensors](https://docs.dagster.io/concepts/partitions-schedules-sensors/sensors) for your jobs, the [Dagster Daemon](https://docs.dagster.io/deployment/dagster-daemon) process must be running. This is done automatically when you run `dagster dev`.
+```bash
+dagit dev
+```
 
-Once your Dagster Daemon is running, you can start turning on schedules and sensors for your jobs.
 
-## Deploy on Dagster Cloud
+### Production
+The production version requires a few things to run:
 
-The easiest way to deploy your Dagster project is to use Dagster Cloud.
+- A BigQuery project with application credentials configured
+- A running Steampipe service with [Github credentials](https://hub.steampipe.io/plugins/turbot/github#credentials)
+  configured for API access.
+- A Hex account with an API key and a project to run
 
-Check out the [Dagster Cloud Documentation](https://docs.dagster.cloud) to learn more.
+## Using environment variables to handle secrets
+
+Dagster allows using environment variables to handle sensitive information. You can define various configuration options and access environment variables through them. This also allows you to parameterize your pipeline without modifying code.
+
+- BIGQUERY
+  - `BIGQUERY_PROJECT` e.g. `my-bigquery-project`
+- HEX
+  - `HEX_API_KEY` e.g. `super-secret-api-key`
+  - `HEX_PROJECT_ID` e.g. `abc-123-def`
+- STEAMPIPE
+  - `STEAMPIPE_CONN` e.g. `postgresql://steampipe:hunter42@localhost:9193/steampipe`
+
+You can declare environment variables in various ways:
+- **Local development**: [Using `.env` files to load env vars into local environments](https://docs.dagster.io/guides/dagster/using-environment-variables-and-secrets#declaring-environment-variables)
+- **Dagster Cloud**: [Using the Dagster Cloud UI](https://docs.dagster.io/master/dagster-cloud/developing-testing/environment-variables-and-secrets#using-the-dagster-cloud-ui) to manage environment variables
+- **Dagster Open Source**: How environment variables are set for Dagster projects deployed on your infrastructure depends on where Dagster is deployed. Read about how to declare environment variables [here](https://docs.dagster.io/master/guides/dagster/using-environment-variables-and-secrets#declaring-environment-variables).
+
+Check out [Using environment variables and secrets guide](https://docs.dagster.io/guides/dagster/using-environment-variables-and-secrets) for more info and examples.

@@ -20,14 +20,16 @@ joined as (
     pypi.download_date,
     pypi.project_name,
     pypi.project_version,
+    pypi.project_name || '-'||
+        split(project_version, '.')[safe_offset(0)] || '.' || split(project_version, '.')[safe_offset(1)] as project_name_version,
+
     pypi.file_downloads_count
 
 
     from github
     left join pypi
         on github.repo_name = pypi.project_name
-        and pypi.download_date <= github.snapshot_date
-    qualify row_number() over (partition by github.repo_name order by pypi.download_date desc) = 1
+        and pypi.download_date = github.snapshot_date
 )
 
 select * from joined
