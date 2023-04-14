@@ -37,7 +37,7 @@ pip install -e .
 Then start dagit
 
 ```bash
-dagster dev
+dagit dev
 ```
 
 ### Production
@@ -48,6 +48,9 @@ The production version requires a few things to run:
 - A running [Steampipe](https://steampipe.io/downloads) service with [Github credentials](https://hub.steampipe.io/plugins/turbot/github#credentials)
   configured for API access.
 - A Hex account with an API key and a project to run
+
+Be mindful of costs of running this model, especially if you choose to backfill.
+It is recommended that you only run for a few partition dates to test.
 
 ## Using environment variables to handle secrets
 
@@ -67,7 +70,6 @@ You can declare environment variables in various ways:
 - **Dagster Open Source**: How environment variables are set for Dagster projects deployed on your infrastructure depends on where Dagster is deployed. Read about how to declare environment variables [here](https://docs.dagster.io/master/guides/dagster/using-environment-variables-and-secrets#declaring-environment-variables).
 
 Check out [Using environment variables and secrets guide](https://docs.dagster.io/guides/dagster/using-environment-variables-and-secrets) for more info and examples.
-
 
 ## Steampipe Setup
 
@@ -90,3 +92,4 @@ Typically you can use the following connection string
 `postgresql://steampipe@localhost:9193/steampipe`
 
 Note that it is `postgresql` and not `postgres`.
+

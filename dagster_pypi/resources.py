@@ -74,7 +74,7 @@ def get_github_stars_streampipe(date):
         subscribers_count,
         watchers_count
     from github_repository
-    where full_name in ( 'dagster-io/dagster',)
+    where full_name in ('dagster-io/dagster')
     """
     df = pd.read_sql(sql, STEAMPIPE_CONN)
     return df

@@ -23,7 +23,6 @@ joined as (
     pypi.project_name
         ||'-'|| {{ dbt.split_part(string_text='project_name', delimiter_text="'.'", part_number=0) }}
         ||'-'|| {{ dbt.split_part(string_text='project_name', delimiter_text="'.'", part_number=1) }} as project_name_version,
-
     pypi.file_downloads_count
 
 

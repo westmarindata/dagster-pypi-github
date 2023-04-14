@@ -11,8 +11,6 @@ dbt_assets = load_assets_from_dbt_project(
 )
 
 START_DATE = "2023-04-10"
-
-
 @asset(
     key_prefix=["dagster_pypi"],
     required_resource_keys={"pypi_manager"},
@@ -21,6 +19,7 @@ START_DATE = "2023-04-10"
 )
 def raw_pypi_downloads(context) -> pd.DataFrame:
     return context.resources.pypi_manager(context.partition_key)
+
 
 
 @asset(
@@ -61,7 +60,7 @@ def github_stars(raw_github_stars) -> pd.DataFrame:
     required_resource_keys={"hex"},
 )
 def hex_notebook(context) -> None:
-    if os.getenv("DAGSTER_ENV") == "prod":
+    if os.getenv("DAGSTER_ENV") == "PROD":
         context.resources.hex.run_and_poll(
             project_id=HEX_PROJECT_ID,
             inputs=None,

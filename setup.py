@@ -15,6 +15,7 @@ setup(
         "dbt-bigquery~=1.4.3",
         "dbt-duckdb~=1.4.1",
         "google-cloud-bigquery~=3.9.0",
+        "psycopg2-binary~=2.9.6",
 
     ],
     extras_require={"dev": ["dagit", "pytest"]},
