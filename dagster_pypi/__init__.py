@@ -24,5 +24,5 @@ print("Loading definitions for environment: ", ENV)
 defs = Definitions(
     assets=all_assets,
     schedules=[daily_schedule],
-    resources=resources.resource_def[ENV],
+    resources=resources.resource_def[ENV.upper()],
 )
