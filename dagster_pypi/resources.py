@@ -14,6 +14,7 @@ FILE_PATH = os.path.dirname(__file__)
 DBT_PROJECT_DIR = os.path.join(FILE_PATH, "./dbt_project")
 DBT_PROFILE_DIR = os.path.join(DBT_PROJECT_DIR, "./profiles")
 STEAMPIPE_CONN = os.getenv("STEAMPIPE_CONN")
+HEX_API_KEY = os.getenv("HEX_API_KEY")
 HEX_PROJECT_ID = os.getenv("HEX_PROJECT_ID")
 
 
@@ -103,13 +104,13 @@ class GithubSteampipeResource(GithubResource):
 resource_def = {
     "LOCAL": {
         "io_manager": duckdb_io_manager,
+        "hex": hex_resource.configured({"api_key": HEX_API_KEY}),
         "github": GithubLocalResource(
             input_file=os.path.join(FILE_PATH, "../data/github_star_count.csv")
         ),
         "pypi": PyPiLocalResource(
             input_file=os.path.join(FILE_PATH, "../data/pypi_downloads.csv")
         ),
-        "hex": hex_resource.configured({"api_key": EnvVar("HEX_API_KEY")}),
         "dbt": dbt_cli_resource.configured(
             {
                 "project_dir": DBT_PROJECT_DIR,
@@ -122,7 +123,7 @@ resource_def = {
         "io_manager": bigquery_pandas_io_manager,
         "github": GithubSteampipeResource(streampipe_conn=EnvVar("STEAMPIPE_CONN")),
         "pypi": PyPiBigQueryResource(table="bigquery-public-data.pypi.file_downloads"),
-        "hex": hex_resource.configured({"api_key": EnvVar("HEX_API_KEY")}),
+        "hex": hex_resource.configured({"api_key": HEX_API_KEY}),
         "dbt": dbt_cli_resource.configured(
             {
                 "project_dir": DBT_PROJECT_DIR,
